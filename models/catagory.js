@@ -4,15 +4,12 @@ const db = require("../config/db");
 const Category = db.define("Category", {
   name: {
     type: DataTypes.STRING,
-    allowNull: false,
   },
   image_path: {
     type: DataTypes.STRING(1000),
-    allowNull: true,
   },
   description: {
     type: DataTypes.TEXT,
-    allowNull: true,
   },
 });
 

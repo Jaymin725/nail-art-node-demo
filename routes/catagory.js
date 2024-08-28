@@ -1,23 +1,27 @@
 const express = require("express");
 const multer = require("multer");
 const catagoryController = require("../controllers/catagory");
+const Catagory = require("../models/catagory");
 
 const router = express.Router();
 
-// const storage = multer.diskStorage({
-//   destination: function (req, file, callback) {
-//     callback(null, "public/images/catagory");
-//   },
-//   filename: function (req, file, callback) {
-//     callback(null, `${Date.now()}-${file.originalname}`);
-//   },
-// });
+const upload = multer({ dest: "./public/images/catagories" });
 
-// const upload = multer({ storage });
-const upload = multer({ dest: "./uploads/" });
+router.get("/", catagoryController.readAllCatagories);
 
-router.get("/create", (req, res) => res.render("catagory-create"));
+router
+  .route("/create")
+  .get((req, res) => res.render("catagory-create"))
+  .post(upload.single("image"), catagoryController.createCatagory);
 
-router.post("/", upload.single("image"), catagoryController.createCatagory);
+router
+  .route("/update/:id")
+  .get(async (req, res) => {
+    const catagory = await Catagory.findByPk(req.params.id);
+    res.render("catagory-update", { catagory });
+  })
+  .post(upload.single("image"), catagoryController.updateCatagory);
+
+router.get("/delete/:id", catagoryController.deleteCatagory);
 
 module.exports = router;

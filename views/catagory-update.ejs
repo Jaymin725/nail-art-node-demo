@@ -5,15 +5,21 @@
     <%- include('partials/header') -%>
     <main>
       <section>
-        <h2>Create Catagory</h2>
+        <h2>Update Catagory</h2>
         <form
-          action="/catagories/create"
+          action="/catagories/update/<%= catagory.id %>"
           method="post"
           enctype="multipart/form-data"
         >
           <div>
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required />
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value="<%= catagory.name %>"
+              required
+            />
           </div>
           <div>
             <label for="image">Image:</label>
@@ -21,10 +27,12 @@
           </div>
           <div>
             <label for="description">Description:</label>
-            <textarea id="description" name="description"></textarea>
+            <textarea id="description" name="description">
+<%= catagory.description %></textarea
+            >
           </div>
           <div>
-            <button type="submit">Create</button>
+            <button type="submit">Update</button>
           </div>
         </form>
       </section>
