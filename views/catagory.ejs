@@ -15,7 +15,7 @@
               <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Image Path</th>
+                <th>Image</th>
                 <th>Description</th>
                 <th>Action</th>
               </tr>
@@ -27,7 +27,13 @@
             <tr>
               <td><%= id %></td>
               <td><%= name %></td>
-              <td><%= image_path %></td>
+              <td>
+                <img
+                  src="/images/catagories/<%= image_path %>"
+                  alt=""
+                  width="200"
+                />
+              </td>
               <td><%= description %></td>
               <td>
                 <a href="/catagories/update/<%= id %>">Update</a>

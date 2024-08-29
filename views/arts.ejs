@@ -16,7 +16,7 @@
                 <th>Id</th>
                 <th>Title</th>
                 <th>Catagory</th>
-                <th>Image Path</th>
+                <th>Image</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -27,7 +27,9 @@
               <td><%= id %></td>
               <td><%= title %></td>
               <td><%= catagory_id %></td>
-              <td><%= image_path %></td>
+              <td>
+                <img src="/images/arts/<%= image_path %>" alt="" width="200" />
+              </td>
               <td>
                 <a href="/arts/update/<%= id %>">Update</a>
                 <a href="/arts/delete/<%= id %>">Delete</a>
