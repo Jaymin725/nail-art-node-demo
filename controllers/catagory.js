@@ -27,7 +27,7 @@ async function createCatagory(req, res) {
 
 async function readAllCatagories(req, res) {
   const catagories = await Catagory.findAll();
-  res.render("catagory", { catagories });
+  res.render("dashboard", { page: "catagories", catagories });
 }
 
 async function updateCatagory(req, res) {

@@ -1,0 +1,40 @@
+<section>
+  <h2>Update Catagory</h2>
+  <hr />
+  <form
+    action="/catagories/update/<%= catagory.id %>"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <div class="row mb-3">
+      <label for="name" class="col-sm-2 col-form-label">Name</label>
+      <div class="col-sm-10">
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          value="<%= catagory.name %>"
+          required
+        />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="image" class="col-sm-2 col-form-label">Image</label>
+      <div class="col-sm-10">
+        <input class="form-control" type="file" id="image" name="image" />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="description" class="col-sm-2 col-form-label"
+        >Description</label
+      >
+      <div class="col-sm-10">
+        <textarea class="form-control" id="description" name="description">
+<%= catagory.description %></textarea
+        >
+      </div>
+    </div>
+    <button type="submit" class="btn btn-secondary">Update</button>
+  </form>
+</section>
