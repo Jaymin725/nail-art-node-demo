@@ -11,14 +11,14 @@ router.get("/", catagoryController.readAllCatagories);
 
 router
   .route("/create")
-  .get((req, res) => res.render("catagory-create"))
+  .get((req, res) => res.render("dashboard", { page: "catagory-create" }))
   .post(upload.single("image"), catagoryController.createCatagory);
 
 router
   .route("/update/:id")
   .get(async (req, res) => {
     const catagory = await Catagory.findByPk(req.params.id);
-    res.render("catagory-update", { catagory });
+    res.render("dashboard", { page: "catagory-update", catagory });
   })
   .post(upload.single("image"), catagoryController.updateCatagory);
 

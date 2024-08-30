@@ -1,0 +1,45 @@
+<section>
+  <h2>Catagories</h2>
+  <hr />
+  <a href="/catagories/create" class="btn btn-secondary">
+    <i class="bi bi-plus"></i>
+    Add
+  </a>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Description</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% catagories.forEach(({ id, name, image_path, description }) => { %>
+      <tr>
+        <td><%= id %></td>
+        <td><%= name %></td>
+        <td>
+          <img src="/images/catagories/<%= image_path %>" alt="" width="200" />
+        </td>
+        <td><%= description %></td>
+        <td>
+          <div class="btn-group">
+            <a
+              href="/catagories/update/<%= id %>"
+              class="btn btn-outline-secondary"
+              ><i class="bi bi-pen"></i
+            ></a>
+            <a
+              href="/catagories/delete/<%= id %>"
+              class="btn btn-outline-secondary"
+              ><i class="bi bi-trash"></i
+            ></a>
+          </div>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</section>

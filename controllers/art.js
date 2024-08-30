@@ -27,7 +27,7 @@ async function createArt(req, res) {
 
 async function readAllArts(req, res) {
   const arts = await Art.findAll();
-  res.render("arts", { arts });
+  res.render("dashboard", { page: "arts", arts });
 }
 
 async function updateArt(req, res) {
