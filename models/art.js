@@ -10,12 +10,9 @@ const Art = db.define("Art", {
       model: Catagory,
       key: "id",
     },
+    onDelete: "CASCADE",
   },
   image_path: DataTypes.STRING(1000),
 });
-
-Art.sync({ alter: true })
-  .then(() => console.log("Art table synced successfully."))
-  .catch((error) => console.error("Failed to sync Art table:", error));
 
 module.exports = Art;

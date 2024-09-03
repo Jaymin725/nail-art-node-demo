@@ -1,20 +1,18 @@
 const { DataTypes } = require("sequelize");
 const db = require("../config/db");
 
-const Category = db.define("Category", {
-  name: {
-    type: DataTypes.STRING,
+const category = db.define(
+  "category",
+  {
+    cat_name: DataTypes.STRING(1000),
+    img: DataTypes.STRING(1000),
+    description: DataTypes.STRING(1000),
+    status: DataTypes.STRING(1000),
   },
-  image_path: {
-    type: DataTypes.STRING(1000),
-  },
-  description: {
-    type: DataTypes.TEXT,
-  },
-});
+  {
+    freezeTableName: true,
+    timestamps: false,
+  }
+);
 
-Category.sync({ alter: true })
-  .then(() => console.log("Category table synced successfully."))
-  .catch((error) => console.error("Failed to sync Category table:", error));
-
-module.exports = Category;
+module.exports = category;
