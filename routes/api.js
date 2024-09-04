@@ -1,19 +1,28 @@
 const express = require("express");
+const categoryModel = require("../models/catagory");
 
 const router = express.Router();
 
 const apiController = {};
 
-apiController.category = (req, res) => {
-  res.end("category");
+apiController.category = async (req, res) => {
+  const categories = await categoryModel.findAll();
+  categories.forEach(
+    (category) =>
+      (category.img =
+        "http://pragmanxt.com/apps/nailart/uploads/" + category.img)
+  );
+  res.json({ data: categories });
 };
 
 apiController.addpost = (req, res) => {
   res.end("addpost");
 };
 
-apiController.select_cat = (req, res) => {
-  res.end("select_cat");
+apiController.select_cat = async (req, res) => {
+  const category = await categoryModel.findByPk(req.query.id);
+  category.img = "http://pragmanxt.com/apps/nailart/uploads/" + category.img;
+  res.json({ data: [category] });
 };
 
 apiController.nailart_design = (req, res) => {

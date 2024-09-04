@@ -1,6 +1,7 @@
 const express = require("express");
 const catagoryRouter = require("./routes/catagory");
 const artRouter = require("./routes/art");
+const apiRouter = require("./routes/api");
 
 const port = process.env.PORT || 3000;
 const app = express();

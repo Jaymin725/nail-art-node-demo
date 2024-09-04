@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const db = require("../config/db");
 
-const category = db.define(
+const categoryModel = db.define(
   "category",
   {
     cat_name: DataTypes.STRING(1000),
@@ -15,4 +15,4 @@ const category = db.define(
   }
 );
 
-module.exports = category;
+module.exports = categoryModel;

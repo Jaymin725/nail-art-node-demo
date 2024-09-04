@@ -1,6 +1,6 @@
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize("nail_art_node_demo", "root", "", {
+const sequelize = new Sequelize("pragmanx_nail_art", "root", "", {
   dialect: "mysql",
   logging: false,
 });
