@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const db = require("../config/db");
 
-const registration = db.define(
+const registrationModel = db.define(
   "registration",
   {
     user_id: {
@@ -21,4 +21,4 @@ const registration = db.define(
   }
 );
 
-module.exports = registration;
+module.exports = registrationModel;

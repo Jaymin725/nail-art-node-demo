@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const db = require("../config/db");
 
-const likes = db.define(
+const likesModel = db.define(
   "likes",
   {
     user: DataTypes.STRING(700),
@@ -15,4 +15,4 @@ const likes = db.define(
   }
 );
 
-module.exports = likes;
+module.exports = likesModel;

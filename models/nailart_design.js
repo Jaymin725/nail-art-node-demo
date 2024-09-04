@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const db = require("../config/db");
 
-const nailart_design = db.define(
+const nailart_designModel = db.define(
   "nailart_design",
   {
     cat_id: DataTypes.STRING(700),
@@ -16,4 +16,4 @@ const nailart_design = db.define(
   }
 );
 
-module.exports = nailart_design;
+module.exports = nailart_designModel;

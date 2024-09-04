@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const db = require("../config/db");
 
-const Post = db.define("Post", {});
+const postModel = db.define("Post", {});
 
-module.exports = Post;
+module.exports = postModel;
