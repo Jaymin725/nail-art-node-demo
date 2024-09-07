@@ -1,8 +1,9 @@
 const express = require("express");
+const sequelize = require("sequelize");
 const db = require("../config/db");
 const categoryModel = require("../models/catagory");
 const postModel = require("../models/post");
-const nailart_designModel = require("../models/nailart_design");
+const { nailart_designModel, likesModel } = require("../models/associations");
 
 const router = express.Router();
 
@@ -34,7 +35,10 @@ apiController.addpost = async (req, res) => {
   const { nextId } = result[0];
   nailart_design.id = nextId;
   nailart_design.title = category.cat_name + nextId;
-  res.json(nailart_design);
+
+  nailart_design.save();
+
+  res.json({ data: [{ value: nextId }] });
 
   // res.json(nailart_design);
   // res.end("addpost");
@@ -46,8 +50,54 @@ apiController.select_cat = async (req, res) => {
   res.json({ data: [category] });
 };
 
-apiController.nailart_design = (req, res) => {
-  res.end("nailart_design");
+apiController.nailart_design = async (req, res) => {
+  try {
+    const { user, cat_id: catId } = req.query;
+
+    // Fetch nail art designs with likes count and filtering
+    const designs = await nailart_designModel.findAll({
+      attributes: {
+        include: [
+          // Subquery to count the number of likes for each design
+          [
+            sequelize.literal(`(
+              SELECT COUNT(*)
+              FROM likes
+              WHERE likes.post = nailart_design.id
+            )`),
+            "likes", // Alias for the count
+          ],
+          // User associated with likes, if any
+          [
+            sequelize.literal(`(
+              SELECT user
+              FROM likes
+              WHERE likes.post = nailart_design.id
+              AND likes.user = '${user}'
+            )`),
+            "user", // Alias for the user
+          ],
+        ],
+      },
+      where: {
+        cat_id: catId,
+        status: "active",
+      },
+      group: ["nailart_design.id"],
+      order: [[sequelize.literal("likes"), "DESC"]], // Order by likes count in descending order
+    });
+
+    // Respond with the fetched designs
+    designs.forEach((design) => {
+      design.img = "http://pragmanxt.com/apps/nailart/uploads/" + design.img;
+    });
+
+    res.status(200).json({ data: designs });
+  } catch (error) {
+    // Handle any errors
+    console.error("Error fetching nail art designs:", error);
+    res.status(500).json({ error: "An error occurred while fetching designs" });
+  }
 };
 
 apiController.search = (req, res) => {

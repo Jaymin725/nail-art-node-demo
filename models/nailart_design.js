@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const db = require("../config/db");
+const likesModel = require("./likes");
 
 const nailart_designModel = db.define(
   "nailart_design",
