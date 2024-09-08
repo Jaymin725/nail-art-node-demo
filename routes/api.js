@@ -100,8 +100,46 @@ apiController.nailart_design = async (req, res) => {
   }
 };
 
-apiController.search = (req, res) => {
-  res.end("search");
+apiController.search = async (req, res) => {
+  const designs = await nailart_designModel.findAll({
+    attributes: {
+      include: [
+        // Subquery to count the number of likes for each design
+        [
+          sequelize.literal(`(
+            SELECT COUNT(*)
+            FROM likes
+            WHERE likes.post = nailart_design.id
+          )`),
+          "likes", // Alias for the count
+        ],
+        // User associated with likes, if any
+        [
+          sequelize.literal(`(
+            SELECT user
+            FROM likes
+            WHERE likes.post = nailart_design.id
+            AND likes.user = '${req.query.user}'
+          )`),
+          "user", // Alias for the user
+        ],
+      ],
+    },
+    where: {
+      title: {
+        [sequelize.Op.like]: `%${req.query.title}%`, // Filtering based on title
+      },
+      status: "active", // Filtering based on status
+    },
+    group: ["nailart_design.id"], // Group by the main table's id
+    order: [[sequelize.literal("likes"), "DESC"]], // Order by the likes count
+  });
+
+  designs.forEach((design) => {
+    design.img = "http://pragmanxt.com/apps/nailart/uploads/" + design.img;
+  });
+
+  res.json({ data: designs });
 };
 
 apiController.likes = (req, res) => {
