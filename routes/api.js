@@ -142,8 +142,42 @@ apiController.search = async (req, res) => {
   res.json({ data: designs });
 };
 
-apiController.likes = (req, res) => {
-  res.end("likes");
+apiController.likes = async (req, res) => {
+  const date = new Date();
+  const formattedDate = date.toISOString().split("T")[0].replace(/-/g, "/");
+  console.log(formattedDate);
+
+  const currentTime = new Date().toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
+
+  let countLikes = await likesModel.count({
+    where: {
+      post: req.query.post,
+    },
+  });
+
+  const like_status = await likesModel.findAll({
+    where: {
+      user: req.query.user,
+      post: req.query.post,
+    },
+  });
+
+  if (like_status.length < 1) {
+    const newLike = likesModel.create({
+      user: req.query.user,
+      post: req.query.post,
+      date: formattedDate,
+      time: currentTime,
+    });
+    countLikes++;
+  }
+
+  res.json({ data: [{ status: "like", likes: countLikes }] });
 };
 
 apiController.unlikes = (req, res) => {
