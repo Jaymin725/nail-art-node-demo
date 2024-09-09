@@ -180,8 +180,31 @@ apiController.likes = async (req, res) => {
   res.json({ data: [{ status: "like", likes: countLikes }] });
 };
 
-apiController.unlikes = (req, res) => {
-  res.end("unlikes");
+apiController.unlikes = async (req, res) => {
+  let countLikes = await likesModel.count({
+    where: {
+      post: req.query.post,
+    },
+  });
+
+  const like_status = await likesModel.findAll({
+    where: {
+      user: req.query.user,
+      post: req.query.post,
+    },
+  });
+
+  if (like_status.length > 0) {
+    await likesModel.destroy({
+      where: {
+        user: req.query.user,
+        post: req.query.post,
+      },
+    });
+    countLikes--;
+  }
+
+  res.json({ data: [{ status: "unlike", likes: countLikes }] });
 };
 
 apiController.uploadImage1 = (req, res) => {
