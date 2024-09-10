@@ -13,8 +13,8 @@ app.use(express.static("public"));
 
 app.get("/", (req, res) => res.redirect("/arts"));
 
-app.use("/catagories", catagoryRouter);
-app.use("/arts", artRouter);
+// app.use("/catagories", catagoryRouter);
+// app.use("/arts", artRouter);
 app.use("/webservice.php", apiRouter);
 
 app.listen(port, () =>
