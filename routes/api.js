@@ -1,11 +1,15 @@
 const express = require("express");
 const sequelize = require("sequelize");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 const db = require("../config/db");
 const categoryModel = require("../models/catagory");
 const postModel = require("../models/post");
 const { nailart_designModel, likesModel } = require("../models/associations");
 
 const router = express.Router();
+const upload = multer({ dest: "uploads/" });
 
 const apiController = {};
 
@@ -207,13 +211,102 @@ apiController.unlikes = async (req, res) => {
   res.json({ data: [{ status: "unlike", likes: countLikes }] });
 };
 
-apiController.uploadImage1 = (req, res) => {
-  res.end("uploadImage1");
+apiController.uploadImage1 = async (req, res) => {
+  // Get the current date and time formatted as "YYYY-MM-DD hh:mm:am/pm"
+  const formatDate = () => {
+    const now = new Date();
+    const formattedDate = now
+      .toLocaleString("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      })
+      .replace(",", "")
+      .replace(/\//g, "-"); // Optional: remove comma between date and time
+    return formattedDate;
+  };
+
+  let status = "";
+  const { filename: temp_name, destination: dir } = req.file;
+
+  try {
+    fs.renameSync(
+      path.format({
+        dir,
+        base: temp_name,
+      }),
+      path.format({
+        dir,
+        base: formatDate() + ".jpg",
+      })
+    );
+
+    await nailart_designModel.update(
+      { img: `${formatDate()}.jpg` },
+      {
+        where: {
+          id: req.query.id,
+        },
+      }
+    );
+
+    status = "valid";
+  } catch (err) {
+    console.log(err);
+    status = "not valid";
+  } finally {
+    res.json({ data: [{ status }] });
+  }
+
+  // res.json(req.file);
 };
 
-apiController.uploadImage = (req, res) => {
+apiController.uploadImage = async (req, res) => {
+  let status = "";
+  const { filename: temp_name, destination: dir } = req.file;
+
+  try {
+    fs.renameSync(
+      path.format({
+        dir,
+        base: temp_name,
+      }),
+      path.format({
+        dir,
+        base: req.query.id + ".jpg",
+      })
+    );
+
+    await nailart_designModel.update(
+      { img: `http://pragmanxt.com/apps/nailart/uploads/${req.query.id}.jpg` },
+      {
+        where: {
+          id: req.query.id,
+        },
+      }
+    );
+
+    status = "valid";
+  } catch (err) {
+    console.log(err);
+    status = "not valid";
+  } finally {
+    res.json({ data: [{ status }] });
+  }
+
   res.end("uploadImage");
 };
+
+router.post("/", upload.single("image"), (req, res) =>
+  (
+    apiController[req.query.action] ||
+    ((req, res) => res.status(404).end(`${req.query.action}: Action not found`))
+  )(req, res)
+);
 
 router.get("/", (req, res) =>
   (
